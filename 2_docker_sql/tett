@@ -1,0 +1,53 @@
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8080:80"
+
+## Correct way to run the commands
+
+docker network create pg-network
+
+winpty docker run -it \
+  --network=pg-network \
+  --name pg-database \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v /c/Users/alexa/Documents/project/DEZ/2_docker_sql/ny_taxi_postgres_data:/var/lib/postgresql/data:rw \
+  -p 5432:5432 \
+  postgres:13
+
+# Works
+winpty docker run -it \
+  --name pgadmin \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  --network=pg-network \
+  dpage/pgadmin4
+
+# ingest data
+winpty docker run -it \
+  --network=pg-network \
+  taxi_ingest:v001 \
+    --user=root \
+    --password=root \
+    --host=pg-database \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=green_taxi_trips \
+    --url="http://192.168.178.31:8000/data/green_tripdata_2019-01.csv.gz"

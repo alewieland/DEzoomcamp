@@ -1,0 +1,14 @@
+.DS_Store
+.idea
+
+
+**.terraform
+**/ny_taxi_postgres_data/*
+*.csv
+.ipynb_checkpoints/
+**.terraform.lock.*
+**.json
+**logs/
+**.env
+**__pycache__/
+.history
