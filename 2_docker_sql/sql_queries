@@ -1,0 +1,29 @@
+-- Question 3
+SELECT COUNT(*)
+FROM green_taxi_data
+WHERE lpep_pickup_datetime::date = '2019-01-15'
+AND lpep_dropoff_datetime::date = '2019-01-15';
+
+
+-- Question 4
+SELECT date_trunc('day', lpep_pickup_datetime::date) as pickup_day,
+max(trip_distance) as max_trip
+from green_taxi_data
+group by pickup_day
+order by max_trip desc
+limit 1;
+
+
+-- Question 5
+SELECT
+	tip_amount,
+	zpu."Zone" as "pickup_loc",
+	zdo."Zone" as "dropoff_loc"
+FROM
+	green_taxi_data t JOIN zones zpu
+		ON t."PULocationID" = zpu."LocationID"
+		JOIN zones zdo
+		ON t."DOLocationID" = zdo."LocationID"
+ORDER by 1 desc
+LIMIT 100;
+	
