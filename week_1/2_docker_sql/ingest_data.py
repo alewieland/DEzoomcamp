@@ -6,9 +6,10 @@ from time import time
 
 import pandas as pd
 from sqlalchemy import create_engine
+from prefect import flow, task
 
-
-def main(params):
+@task(log_prints=True, retries=3)
+def ingest_data(params):
     
     
     user = params.user
@@ -37,39 +38,13 @@ def main(params):
     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
 
 
-    df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-    df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
-
-
     df.head(n=0).to_sql(name=table_name, con=engine, if_exists='replace')
 
     df.to_sql(name=table_name, con=engine, if_exists='append')
 
-
-    while True: 
-
-        try:
-            t_start = time()
-            
-            df = next(df_iter)
-
-            df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-            df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
-
-            df.to_sql(name=table_name, con=engine, if_exists='append')
-
-            t_end = time()
-
-            print('inserted another chunk, took %.3f second' % (t_end - t_start))
-
-        except StopIteration:
-            print("Finished ingesting data into the postgres database")
-            break
-        
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Ingest CSV data to Postgres')
+@flow(name="Ingest Flow")
+def main_flow():
+        parser = argparse.ArgumentParser(description='Ingest CSV data to Postgres')
 
     parser.add_argument('--user', required=True, help='user name for postgres')
     parser.add_argument('--password', required=True, help='password for postgres')
@@ -81,8 +56,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args)
+    ingest_data(args)
 
+
+
+if __name__ == '__main__':
+    main_flow()
 
 
 
