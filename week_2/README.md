@@ -82,7 +82,7 @@ How many rows were processed by the script?
 - `125,268`
 - `377,922`
 - `728,390`
-- `514,392`
+- `514,392` [514_392]
 
 
 ## Question 6. Secrets
@@ -91,18 +91,6 @@ Prefect Secret blocks provide secure, encrypted storage in the database and obfu
 
 - 5
 - 6
-- 8
-- 10
-
-
-## Submitting the solutions
-
-* Form for submitting: TODO
-* You can submit your homework multiple times. In this case, only the last submission will be used. 
-
-Deadline: 6 February (Monday), 22:00 CET
-
-
-## Solution
-
-We will publish the solution here
+- 8 [8]
+- 10 
+![005](img/img005.png)
