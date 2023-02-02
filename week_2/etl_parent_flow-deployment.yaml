@@ -3,7 +3,7 @@
 ###
 name: etl2
 description: null
-version: 4b43bb17c023a891c82aa8c869873067
+version: 8a4934456332c7f57dda7d676809f60c
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
