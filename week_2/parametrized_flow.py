@@ -24,27 +24,33 @@ def fetch(dataset_url: str) -> pd.DataFrame:
     return df
 
 @task(log_prints=True)
-def clean(df: pd.DataFrame) -> pd.DataFrame:
-    """Fix some dtype issues"""
-    df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
-    df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
+def clean(df: pd.DataFrame, color: str) -> pd.DataFrame:
+    """Fix some dtype issues, depending on the color"""
+    if color=='yellow':
+        df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
+        df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
+    if color=='green':
+        df['lpep_pickup_datetime'] = pd.to_datetime(df['lpep_pickup_datetime'])
+        df['lpep_dropoff_datetime'] = pd.to_datetime(df['lpep_dropoff_datetime'])
     print(df.head(5))
     print(f'columns: {df.dtypes}')
     print(f'rows: {len(df)}')
     return df
 
-@task()
+@task(log_prints=True)
 def write_local(df: pd.DataFrame, color: str, dataset_file: str) -> Path:
     """Write DataFrame out as parquet file"""
     data_dir = f'data/{color}'
     Path(data_dir).mkdir(parents=True, exist_ok=True)
-    path = Path(f'{data_dir}/{dataset_file}.parquet')
+    path = Path(f'{data_dir}/{dataset_file}.parquet').as_posix()
+    print(f'Path: {path}')
     df.to_parquet(path, compression='gzip')
     return path
 
-@task()
+@task(log_prints=True)
 def write_gcs(path: Path) -> None:
     """Upload local parquet file to GCS"""
+    print(f'Path: {path}')
     gcp_cloud_storage_bucket_block = GcsBucket.load("zoom-gcs")
     gcp_cloud_storage_bucket_block.upload_from_path(from_path=path, to_path=path)
 
@@ -54,7 +60,7 @@ def etl_web_to_gcs(year: int, month: int, color: str) -> None:
     dataset_file = f'{color}_tripdata_{year}-{month:02}'
     dataset_url = f'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/{color}/{dataset_file}.csv.gz'
     df = fetch(dataset_url)
-    df = clean(df)
+    df = clean(df, color)
     path = write_local(df, color, dataset_file)
     write_gcs(path)
 

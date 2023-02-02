@@ -1,24 +1,15 @@
 ###
-### A complete description of a Prefect Deployment for flow 'etl-parent-flow'
+### A complete description of a Prefect Deployment for flow 'etl-parent-gcs-to-bq'
 ###
-name: etl2
+name: Parametrized GCS to BQ
 description: null
-version: 4b43bb17c023a891c82aa8c869873067
+version: 6a2f2323b6c824cb9e256165a610dd35
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
 parameters: {}
-schedule:
-  cron: 0 5 1 * *
-  timezone: null
-  day_or: true
+schedule: null
 infra_overrides: {}
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: etl-parent-flow
-manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -27,14 +18,17 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
-  _block_document_id: f185746b-a03f-4b03-8845-01a97644a5e2
-  _block_document_name: anonymous-6eb06a08-6666-4feb-a4c5-5a63f0758cd7
-  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: etl-parent-gcs-to-bq
+manifest_path: null
 storage: null
 path: C:\Users\alexa\Documents\project\DEzoomcamp\week_2
-entrypoint: parametrized_flow.py:etl_parent_flow
+entrypoint: parametrized_gcs_to_bq.py:etl_parent_gcs_to_bq
 parameter_openapi_schema:
   title: Parameters
   type: object
@@ -43,7 +37,6 @@ parameter_openapi_schema:
       title: months
       default:
       - 1
-      - 2
       position: 0
       type: array
       items:
