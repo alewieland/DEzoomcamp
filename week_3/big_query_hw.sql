@@ -42,7 +42,9 @@ FROM taxi-rides-ny-375620.ny_taxi.fhv;
 SELECT count(affiliated_base_number)
 FROM taxi-rides-ny-375620.ny_taxi.fhv
 WHERE DATE(pickup_datetime) BETWEEN '2019-03-01' and '2019-03-31';
+-- 647.87 MB
 
 SELECT count(affiliated_base_number)
 FROM taxi-rides-ny-375620.ny_taxi.fhv_partition
 WHERE DATE(pickup_datetime) BETWEEN '2019-03-01' and '2019-03-31'
+-- 23.05 MB
