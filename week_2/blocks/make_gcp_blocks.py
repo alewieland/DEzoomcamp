@@ -9,7 +9,7 @@ from prefect_gcp.cloud_storage import GcsBucket
 credentials_block = GcpCredentials(
     service_account_info={}  # enter your credentials info or use the file method.
 )
-credentials_block.save("zoom-gcp-creds", overwrite=True)
+credentials_block.save("zoom-gcp-credentials", overwrite=True)
 
 
 bucket_block = GcsBucket(
