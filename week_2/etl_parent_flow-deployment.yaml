@@ -1,21 +1,15 @@
 ###
 ### A complete description of a Prefect Deployment for flow 'etl-parent-flow'
 ###
-name: FHV Upload
+name: Parameterized ETL
 description: null
-version: b7efeaf618427c0fd0d939527298a61e
+version: fde9a8f76400e1e2ff8e42ef1377334c
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
 parameters: {}
 schedule: null
 infra_overrides: {}
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: etl-parent-flow
-manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -24,14 +18,17 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
-  _block_document_id: 9a6b8401-9ad6-47d2-a4b1-f32a8a81b4f4
-  _block_document_name: anonymous-be895403-1191-4147-8450-896a54cad710
-  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: etl-parent-flow
+manifest_path: null
 storage: null
 path: C:\Users\alexa\Documents\project\DEzoomcamp\week_2
-entrypoint: fhv_upload.py:etl_parent_flow
+entrypoint: parametrized_flow.py:etl_parent_flow
 parameter_openapi_schema:
   title: Parameters
   type: object
@@ -49,5 +46,10 @@ parameter_openapi_schema:
       default: 2020
       position: 1
       type: integer
+    color:
+      title: color
+      default: green
+      position: 2
+      type: string
   required: null
   definitions: null

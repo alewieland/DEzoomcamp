@@ -14,7 +14,7 @@ from prefect_gcp.cloud_storage import GcsBucket
 # https://datatalks-club.slack.com/archives/C01FABYF2RG/p1674823816614039
 # https://github.com/PrefectHQ/prefect/issues/6086
 # @task(retries=3, cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1))
-@task(retries=3)
+@task(retries=2)
 def fetch(dataset_url: str) -> pd.DataFrame:
     """Read taxi data from web into pandas DataFrame"""
     # simulating failure to test retries
@@ -26,15 +26,13 @@ def fetch(dataset_url: str) -> pd.DataFrame:
 @task(log_prints=True)
 def clean(df: pd.DataFrame, color: str) -> pd.DataFrame:
     """Fix some dtype issues, depending on the color"""
+    df = df.convert_dtypes()
     if color=='yellow':
         df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
         df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
     if color=='green':
         df['lpep_pickup_datetime'] = pd.to_datetime(df['lpep_pickup_datetime'])
         df['lpep_dropoff_datetime'] = pd.to_datetime(df['lpep_dropoff_datetime'])
-    print(df.head(5))
-    print(f'columns: {df.dtypes}')
-    print(f'rows: {len(df)}')
     return df
 
 @task(log_prints=True)
@@ -42,7 +40,7 @@ def write_local(df: pd.DataFrame, color: str, dataset_file: str) -> Path:
     """Write DataFrame out as parquet file"""
     data_dir = f'data/{color}'
     Path(data_dir).mkdir(parents=True, exist_ok=True)
-    path = Path(f'{data_dir}/{dataset_file}.parquet').as_posix()
+    path = Path(f'{data_dir}/{dataset_file}.parquet')
     print(f'Path: {path}')
     df.to_parquet(path, compression='gzip')
     return path
@@ -50,9 +48,10 @@ def write_local(df: pd.DataFrame, color: str, dataset_file: str) -> Path:
 @task(log_prints=True)
 def write_gcs(path: Path) -> None:
     """Upload local parquet file to GCS"""
+    to_path = Path(path).as_posix()
     print(f'Path: {path}')
     gcp_cloud_storage_bucket_block = GcsBucket.load("zoom-gcs")
-    gcp_cloud_storage_bucket_block.upload_from_path(from_path=path, to_path=path)
+    gcp_cloud_storage_bucket_block.upload_from_path(from_path=path, to_path=to_path)
 
 @flow()
 def etl_web_to_gcs(year: int, month: int, color: str) -> None:
@@ -70,7 +69,7 @@ def etl_parent_flow(months: list[int] = [11], year: int = 2020, color: str = 'gr
         etl_web_to_gcs(year, month, color)
 
 if __name__ == '__main__':
-    color = 'green'
-    months = [11]
-    year = 2020
+    color = 'yellow'
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
+    year = 2019
     etl_parent_flow(months, year, color)
