@@ -33,6 +33,8 @@ def clean(df: pd.DataFrame, color: str) -> pd.DataFrame:
     if color=='green':
         df['lpep_pickup_datetime'] = pd.to_datetime(df['lpep_pickup_datetime'])
         df['lpep_dropoff_datetime'] = pd.to_datetime(df['lpep_dropoff_datetime'])
+        df['ehail_fee'] = df['ehail_fee'].astype('Int64')
+    print(df.dtypes)
     return df
 
 @task(log_prints=True)
@@ -69,7 +71,7 @@ def etl_parent_flow(months: list[int] = [11], year: int = 2020, color: str = 'gr
         etl_web_to_gcs(year, month, color)
 
 if __name__ == '__main__':
-    color = 'yellow'
-    months = [10,11,12]
-    year = 2019
+    color = 'green'
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
+    year = 2020
     etl_parent_flow(months, year, color)

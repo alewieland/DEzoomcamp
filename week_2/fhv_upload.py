@@ -22,7 +22,7 @@ def fetch(url: str) -> pd.DataFrame:
     
     df = df.convert_dtypes()
     df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
-    df['dropoff_datetime'] = pd.to_datetime(df['dropOff_datetime'])
+    df['dropOff_datetime'] = pd.to_datetime(df['dropOff_datetime'])
     
     return df
 
@@ -61,6 +61,6 @@ def etl_parent_flow(months: list[int] = [11], year: int = 2020) -> None:
 
 if __name__ == '__main__':
 
-    months = [2]
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
     year = 2019
     etl_parent_flow(months, year)
