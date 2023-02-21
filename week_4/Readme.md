@@ -26,7 +26,7 @@ You should find the views and models for querying in your DWH.
 CREATE OR REPLACE EXTERNAL TABLE taxi-rides-ny-375620.trips_data_all.yellow_tripdata
 OPTIONS(
   format = 'parquet',
-  uris = ['gs://dtc_data_lake_ny-rides-kelvin/yellow_parquet/*']
+  uris = ['gs://ny-taxi-trips-bocker/data/yellow/yellow_tripdata_*.parquet']
 );
 ``` 
 ``` sql
@@ -39,13 +39,13 @@ SELECT * FROM taxi-rides-ny-375620.trips_data_all.yellow_tripdata;
 CREATE OR REPLACE EXTERNAL TABLE taxi-rides-ny-375620.trips_data_all.yellow_tripdata
 OPTIONS(
   format = 'parquet',
-  uris = ['gs://dtc_data_lake_ny-rides-kelvin/green_parquet/*']
+  uris = ['gs://ny-taxi-trips-bocker/data/green/green_tripdata_*.parquet']
 );
 ``` 
 ``` sql
 -- Create table from external table (green)
-CREATE OR REPLACE TABLE taxi-rides-ny-375620.trips_data_all.yellow_tripdata_table AS
-SELECT * FROM taxi-rides-ny-375620.trips_data_all.yellow_tripdata;
+CREATE OR REPLACE TABLE taxi-rides-ny-375620.trips_data_all.green_tripdata_table AS
+SELECT * FROM taxi-rides-ny-375620.trips_data_all.green_tripdata;
 ```
 
 1. Go to `cloud.getdbt.com`
