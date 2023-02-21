@@ -5,6 +5,7 @@ models:
     description: >
       List of unique zones idefied by locationid. 
       Includes the service zone they correspond to (Green or yellow).
+      
   - name: fact_trips
     description: >
       Taxi trips corresponding to both service zones (Green and yellow).
@@ -22,3 +23,4 @@ models:
         tests:
             - not_null:
                 severity: error
+
