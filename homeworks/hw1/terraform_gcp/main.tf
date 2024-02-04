@@ -9,7 +9,7 @@ terraform {
 
 
 provider "google" {
-  project = "dtc-de-zoomcamp-2024"
+  project = "dtc-de-course-412219"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
