@@ -1,0 +1,5 @@
+URL="spark://ip-172-31-22-115.ec2.internal:7077"
+
+spark-submit \
+    --master="${URL}" \
+    06_spark_sql-script.py

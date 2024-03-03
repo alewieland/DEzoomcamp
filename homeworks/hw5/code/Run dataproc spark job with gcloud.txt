@@ -1,0 +1,65 @@
+{
+  "reference": {
+    "jobId": "job-9268494e",
+    "projectId": "banded-pad-411315"
+  },
+  "placement": {
+    "clusterName": "ems-de-zoomcamp-cluster"
+  },
+  "status": {
+    "state": "DONE",
+    "stateStartTime": "2024-02-29T10:48:53.183740Z"
+  },
+  "yarnApplications": [
+    {
+      "name": "test",
+      "state": "FINISHED",
+      "progress": 1,
+      "trackingUrl": "http://ems-de-zoomcamp-cluster-m.us-east1-c.c.banded-pad-411315.internal.:8088/proxy/application_1709202196813_0002/"
+    }
+  ],
+  "statusHistory": [
+    {
+      "state": "PENDING",
+      "stateStartTime": "2024-02-29T10:48:06.112803Z"
+    },
+    {
+      "state": "SETUP_DONE",
+      "stateStartTime": "2024-02-29T10:48:06.143289Z"
+    },
+    {
+      "state": "RUNNING",
+      "details": "Agent reported job success",
+      "stateStartTime": "2024-02-29T10:48:06.423930Z"
+    }
+  ],
+  "driverControlFilesUri": "gs://dataproc-staging-us-east1-1084011134216-mrqmttvh/google-cloud-dataproc-metainfo/0586108f-b046-4a82-b415-137da159a8e4/jobs/job-9268494e/",
+  "driverOutputResourceUri": "gs://dataproc-staging-us-east1-1084011134216-mrqmttvh/google-cloud-dataproc-metainfo/0586108f-b046-4a82-b415-137da159a8e4/jobs/job-9268494e/driveroutput",
+  "jobUuid": "f5acf901-80e2-49cf-8c4c-e33ef55ecdf9",
+  "done": true,
+  "pysparkJob": {
+    "mainPythonFileUri": "gs://mage-zoomcamp-ems/spark/code/06_spark_sql-dataproc.py"
+  }
+}
+
+gcloud dataproc jobs submit pyspark \
+    --cluster=ems-de-zoomcamp-cluster \
+    --region=us-east1 \
+    gs://mage-zoomcamp-ems/spark/code/06_spark_sql-dataproc.py \
+
+
+
+    other dataproc-flags \
+    -- job-args
+
+# Conexion a Bigquery
+Tutorial
+https://cloud.google.com/dataproc/docs/tutorials/bigquery-connector-spark-example?hl=es-419
+
+Tabla: ny_taxi.reports-fhv-201910
+
+gcloud dataproc jobs submit pyspark \
+    --cluster=ems-de-zoomcamp-cluster \
+    --region=us-east1 \
+    --jars=gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar \
+    gs://mage-zoomcamp-ems/spark/code/06_spark_sql-bigquery-fhv.py
